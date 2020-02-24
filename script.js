@@ -37,7 +37,14 @@ drone.on('open', error => {
   room.on('members', members => {
     console.log('MEMBERS', members);
 
-	if (members.length ==1){
+
+    // If we are the second user to connect to the room we will be creating the offer
+    const isOfferer = members.length === 2;
+    startWebRTC(isOfferer);
+  });
+});
+
+
 var displayMediaOptions = {
   video: {
     cursor: "never"
@@ -50,13 +57,8 @@ var displayMediaOptions = {
     stream.getTracks().forEach(track => pc.addTrack(track, stream));
   }, onError);
 
-	}
 
-    // If we are the second user to connect to the room we will be creating the offer
-    const isOfferer = members.length === 2;
-    startWebRTC(isOfferer);
-  });
-});
+
 
 // Send signaling data via Scaledrone
 function sendMessage(message) {
@@ -79,9 +81,6 @@ function startWebRTC(isOfferer) {
 
   // If user is offerer let the 'negotiationneeded' event create the offer
   if (isOfferer) {
-
-
-
     pc.onnegotiationneeded = () => {
       pc.createOffer().then(localDescCreated).catch(onError);
     }
