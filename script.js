@@ -37,7 +37,7 @@ drone.on('open', error => {
   room.on('members', members => {
     console.log('MEMBERS', members);
 
-	if (members.length ===1){
+	if (members.length ==1){
 var displayMediaOptions = {
   video: {
     cursor: "never"
