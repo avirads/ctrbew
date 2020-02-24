@@ -83,9 +83,13 @@ var displayMediaOptions = {
   audio: false
 };
 
-stream = navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-localVideo.srcObject = stream;
-stream.getTracks().forEach(track => pc.addTrack(track, stream));
+ navigator.mediaDevices.getDisplayMedia(displayMediaOptions).then(stream => {
+    // Display your local video in #localVideo element
+    localVideo.srcObject = stream;
+    // Add your stream to be sent to the conneting peer
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+  }, onError);
+
 
   // Listen to signaling data from Scaledrone
   room.on('data', (message, client) => {
