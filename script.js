@@ -63,6 +63,20 @@ function startWebRTC(isOfferer) {
 
   // If user is offerer let the 'negotiationneeded' event create the offer
   if (isOfferer) {
+
+var displayMediaOptions = {
+  video: {
+    cursor: "never"
+  },
+  audio: false
+};
+
+ navigator.mediaDevices.getDisplayMedia(displayMediaOptions).then(stream => {
+    // Add your stream to be sent to the conneting peer
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+  }, onError);
+
+
     pc.onnegotiationneeded = () => {
       pc.createOffer().then(localDescCreated).catch(onError);
     }
@@ -76,17 +90,6 @@ function startWebRTC(isOfferer) {
     }
   };
 
-var displayMediaOptions = {
-  video: {
-    cursor: "never"
-  },
-  audio: false
-};
-
- navigator.mediaDevices.getDisplayMedia(displayMediaOptions).then(stream => {
-    // Add your stream to be sent to the conneting peer
-    stream.getTracks().forEach(track => pc.addTrack(track, stream));
-  }, onError);
 
 
   // Listen to signaling data from Scaledrone
